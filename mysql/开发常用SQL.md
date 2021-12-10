@@ -53,3 +53,38 @@ SELECT * FROM address WHERE FIND_IN_SET('5', addressCodes);
 select SQL_CACHE * from T where ID=10;
 ```
 
+#### 常用命令
+##### show status    
+查看系统运行的实时状态，便于dba查看mysql当前运行的状态，做出相应优化，动态的，不可认为修改，只能系统自动update。
+
+MariaDB [(none)]> show status like '%conn%';
++--------------------------+----------+
+| Variable_name            | Value    |
++--------------------------+----------+
+| Aborted_connects         | 101      |   ---- 中断连接数
+| Connections              | 11066535 |    ---- 总共的连接数
+| Max_used_connections     | 151      |    ----- 曾经的最大连接数
+| Ssl_client_connects      | 0        |
+| Ssl_connect_renegotiates | 0        |
+| Ssl_finished_connects    | 0        |
+| Threads_connected        | 10       |    ---- 当前的连接客户端
++--------------------------+----------+
+
+##### show variables    
+查看系统参数，系统默认设置或者dba调整优化后的参数，静态的。可以通过set或者修改my.cnf配置文件修改。
+
+MariaDB [(none)]> show variables like '%conn%';
++--------------------------+-----------------+
+| Variable_name            | Value           |
++--------------------------+-----------------+
+| character_set_connection | utf8            |
+| collation_connection     | utf8_general_ci |
+| connect_timeout          | 10              |    ---连接数超时时间
+| extra_max_connections    | 1               |    ---额外的最大连接数
+| init_connect             |                 |
+| max_connect_errors       | 10              |    ---允许客户端最大的错误连接数
+| max_connections          | 1500            |    ---最大连接数
+| max_user_connections     | 0               |
++--------------------------+-----------------+
+
+ max_connect_errors = 10    表示客户端连接数mysql时，如果错误连接数（输入密码错误）10次，之后mysql会自动锁死，防止该客户端再次连接。防止穷举的网络连接攻击。
