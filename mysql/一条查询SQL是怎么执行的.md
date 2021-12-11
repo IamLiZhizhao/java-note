@@ -123,3 +123,19 @@ mysql> update T set c=c+1 where ID=2;
 引擎将这行新数据更新到内存中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。
 执行器生成这个操作的 binlog，并把 binlog 写入磁盘。
 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。
+
+
+##  为什么我只查一行的语句，也执行这么慢？
+1. 系统正在刷脏页（偶发）
+2. 等 MDL 锁
+使用 show processlist 命令查看 Waiting for table metadata lock.
+查询 sys.schema_table_lock_waits 这张表，我们就可以直接找出造成阻塞的 process id，把这个连接用 kill 命令断开即可。
+select blocking_pid from sys.schema_table_lock_waits;
+3. 等 flush
+flush tables with readlock;
+4. 等行锁
+通过 sys.innodb_lock_waits 查行锁
+ select * from t sys.innodb_lock_waits where locked_table='`test`.`t`'
+5. 事务的一致读
+如果在开启事务后，别的事务对当前查询的数据进行了大量的变更，这个就会存在大量的undo_log, 
+当前事务查询时为了保持数据一致性，需要不断回滚undo_log查

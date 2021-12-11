@@ -88,3 +88,11 @@ MariaDB [(none)]> show variables like '%conn%';
 +--------------------------+-----------------+
 
  max_connect_errors = 10    表示客户端连接数mysql时，如果错误连接数（输入密码错误）10次，之后mysql会自动锁死，防止该客户端再次连接。防止穷举的网络连接攻击。
+
+
+
+##### 使用 explain 命令查看语句的执行情况
+Extra 字段显示 Using temporary，表示的是需要使用临时表；Using filesort，表示的是需要执行排序操作。
+
+##### SHOW PROCESSLIST 显示哪些线程正在运行。
+关键参数：State、Info

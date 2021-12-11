@@ -74,6 +74,7 @@ InnoDB 里面每个事务有一个唯一的事务 ID，叫作 transaction id。�
     而rc每次会把up_limit_id更新为快照读之前最新已提交事务的transaction id,则rc不能可重复读
 (2)当前读的情况下,rr是利用record lock+gap lock来实现的,而rc没有gap,所以rc不能可重复读
 
+6.RR隔离级别下，为保证binlog记录顺序，非索引更新会锁住全表记录，且事务结束前不会对不符合条件记录有逐步释放的过程。
 
 #### count(*)这么慢，我该怎么办？
 count(*) 的时候，需要把数据一行一行地从引擎里面读出来，然后累积计数。
