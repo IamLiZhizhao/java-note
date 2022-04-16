@@ -24,3 +24,8 @@ WAL，全称是Write-Ahead Logging， 预写日志系统。指的是 MySQL 的�
 作用分别是 " 完成MVCC从而实现 MySQL 的隔离级别 "、
 " 降低随机写的性能消耗（转成顺序写），同时防止写操作因为宕机而丢失 "、
 " 写操作的备份，保证主从一致 "。
+
+
+LSN：
+日志逻辑序列号（log sequence number，LSN）的概念。LSN 是单调递增的，用来对应 redo log 的一个个写入点。每次写入长度为 length 的 redo log， LSN 的值就会加上 length。
+LSN 也会写到 InnoDB 的数据页中，来确保数据页不会被多次执行重复的 redo log。
