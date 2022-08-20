@@ -29,3 +29,6 @@ WAL，全称是Write-Ahead Logging， 预写日志系统。指的是 MySQL 的�
 LSN：
 日志逻辑序列号（log sequence number，LSN）的概念。LSN 是单调递增的，用来对应 redo log 的一个个写入点。每次写入长度为 length 的 redo log， LSN 的值就会加上 length。
 LSN 也会写到 InnoDB 的数据页中，来确保数据页不会被多次执行重复的 redo log。
+
+GTID：
+GTID 的全称是 Global Transaction Identifier，也就是全局事务 ID
